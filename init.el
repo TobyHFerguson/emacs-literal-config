@@ -3,11 +3,18 @@
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
-(package-initialize)
-
+(require 'package)
 (add-to-list 'package-archives
 	     '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+(package-initialize)
+(package-refresh-contents)
+;; Why I have to do this I don't know. But if I don't then I get this message:
+;; File error: https://elpa.gnu.org/packages/csv-mode-1.7.el, Bad Request
+;; which is fatal to the rest of the package installation process
 
+(package-install 'csv-mode)
+
+;; (setq my/package-list '(csv-mode))
 (setq my/package-list
       '(adoc-mode
         aggressive-indent
@@ -19,11 +26,12 @@
 	clojure-mode
 	coffee-mode
 	company
-	csv-mode
+	;; csv-mode
 	dash
         diminish
 	exec-path-from-shell
 	flycheck
+        flycheck-joker
 	fringe-helper
 	git
 	git-gutter
@@ -64,10 +72,11 @@
         scss-mode
 	sass-mode
 	shut-up
-	slamhound
+	;; slamhound
 	smart-mode-line
 	smartparens
 	smex
+        string-inflection
 	tracking
 	undo-tree
 	nyan-mode

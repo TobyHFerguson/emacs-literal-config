@@ -318,8 +318,6 @@
 
    For lisp code, I want ParEdit plus general highlighting etc.
 
-   I'm testing parinfer-mode at the moment instead though.
-
    #+NAME: programming-setup
    #+BEGIN_SRC emacs-lisp
      (setq my/lisps
@@ -327,7 +325,7 @@
 
      ;;  Install local bindings for paredit that work under ssh/terminal
      (require 'paredit)
-     (require 'parinfer-mode)
+     ;; (require 'parinfer-mode)
 
      (define-key paredit-mode-map
        (kbd "C-c s <right>")
@@ -337,7 +335,8 @@
        (kbd "C-c s <left>")
        'paredit-forward-barf-sexp)
 
-     (require 'literal-string)
+       ;; I don't like literal-string because it consumes the C-c ' key binding which I use for editing source code in org mode
+       ;; (require 'literal-string)
      (defun my/general-lisp-hooks ()
        (my/turn-on 'paredit
                    'rainbow-delimiters
@@ -420,8 +419,8 @@
    #+BEGIN_SRC emacs-lisp
      (require 'flycheck-joker)
 
-     (with-eval-after-load 'flycheck
-       (flycheck-pos-tip-mode))
+     ;; (with-eval-after-load 'flycheck
+     ;;   (flycheck-pos-tip-mode))
    #+END_SRC
 
 ** Ruby
@@ -540,7 +539,10 @@
 
   #+NAME: databases
   #+BEGIN_SRC emacs-lisp
-  (sql-set-product-feature 'postgres :prompt-regexp "^[a-zA-Z_]*=[#>] ")
+    (add-hook 'sql-interactive-mode-hook
+              (lambda ()
+                (sql-set-product-feature 'postgres :prompt-regexp "^[a-zA-Z_]*=[#>] ")))
+
   #+END_SRC
 * Dired
   #+name: dired
@@ -641,7 +643,9 @@
 
     (setq ido-enable-flex-matching t)
     (ido-mode +1)
-    (ido-ubiquitous-mode +1)
+
+    ;; I think that the following has been replaced by ido-completing-read in Emacs 26+
+    ;; (ido-ubiquitous-mode +1)
     (require 'ido-yes-or-no)
     (ido-yes-or-no-mode +1)
 
@@ -1046,6 +1050,15 @@
   By default, Emacs saves the options you set via the `customize-*`
   functions in the user init file, which is "~/.emacs.d/init.el" in
   this setup. I prefer to have it put that data in a seperate file.
+
+  We need to ensure that there is an empty ~custome.el~ file the first time we run emacs
+  #+name: customize-config
+  #+BEGIN_SRC emacs-lisp
+    (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+    (unless (file-exists-p custom-file)
+      (write-region "" nil custom-file))
+    (load custom-file)
+  #+END_SRC
 
   #+name: customize-config
   #+BEGIN_SRC emacs-lisp
