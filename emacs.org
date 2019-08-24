@@ -756,6 +756,35 @@
    I want to file and refile notes to any header level 1 - 3 in any
    file in my =org-agenda-files= list.
 
+   Capturing urls from chrome etc is somewhat complicated.
+
+   I got my ideas from:
+   1. [[https://blog.aaronbieber.com/2016/11/24/org-capture-from-anywhere-on-your-mac.html][Org Capture From Anywhere on Your Mac]]
+   1. [[http://mediaonfire.com/blog/2017_07_21_org_protocol_firefox.html][Firefox and org-protocol URL Capture]]
+
+   In particular #2 above gave me a debug process:
+   #+BEGIN_SRC sh
+     emacsclient -n "org-protocol:///capture?url=http%3a%2f%2fduckduckgo%2ecom&title=DuckDuckGo"
+   #+END_SRC
+   The first one really gave me some help because it included python code
+   that parsed out the URL and then called the ~emacsclient~ process
+
+   The bookmarks I added to chrome were:
+   #+name: Org: Capture
+   #+BEGIN_SRC javascript
+     javascript:location.href='org-protocol://capture?template=l'+
+         '&url='+encodeURIComponent(location.href)+
+         '&title='+encodeURIComponent(document.title)+
+         '&body='+encodeURIComponent(window.getSelection());
+   #+END_SRC
+
+   #+name: Org: store-link
+   #+BEGIN_SRC javascript
+   javascript:location.href='org-protocol://store-link'+
+       '?url='+encodeURIComponent(location.href)+
+       '&title='+encodeURIComponent(document.title);
+   #+END_SRC
+
    #+name: org-config
    #+BEGIN_SRC emacs-lisp
      (setq org-refile-targets '((nil :maxlevel . 3)
@@ -767,13 +796,22 @@
            '(("t" "Todo" entry (file+headline "~/org/gtd.org" "Inbox")
               "* NEXT %?\nEntered on %U\n  %i\n  %a")
              ("j" "Journal" entry (file+datetree "~/org/journal.org")
-              "* %?\nEntered on %U\n  %i\n  %a")))
+              "* %?\nEntered on %U\n  %i\n  %a")
+             ("w" "org-protocol" entry (file "~/org/refile.org")
+              "* TODO Review %a\n%U\n%:initial\n" :immediate-finish t)
+             ("l" "A link, for reading later." entry
+              (file+headline "notes.org" "Reading List")
+              "* %:annotation\n%U\n\n%i"
+              :empty-lines 1)
+             ))
 
-    (defun my/get-things-done ()
-      (interactive)
-      (find-file "~/org/gtd.org"))
+     (setq org-protocol-default-template-key "w")
 
-    (global-set-key "\C-cd" 'my/get-things-done)
+     (defun my/get-things-done ()
+       (interactive)
+       (find-file "~/org/gtd.org"))
+
+     (global-set-key "\C-cd" 'my/get-things-done)
 
 
 
@@ -1068,4 +1106,8 @@
   #+BEGIN_SRC emacs-lisp
     (setq custom-file "~/.emacs.d/custom.el")
     (load custom-file)
+  #+END_SRC
+* Make sure we start the emacs server so we can do useful things through ~emacsclient~
+  #+BEGIN_SRC  emacs-lisp
+    (server-start)
   #+END_SRC
