@@ -871,17 +871,21 @@
    allowed. I collect all languages here, then enable all of them at
    the end of the section.
 
+   + Install plantuml from http://plantuml.com
+   + Install graphviz using ~brew install graphviz~ and then restart emacs
+
    #+name: org-config
    #+BEGIN_SRC emacs-lisp
      ;; List of languages that may be evaluated in Org documents
      (setq org-babel-load-languages
            '((emacs-lisp . t)
-;             (shell . t)
+             (shell . t)
              (clojure .t)
              (ledger . t)
              (plantuml . t)
              (dot . t)
-             (ditaa . t)))
+             (ditaa . t)
+             ))
 
      (org-babel-do-load-languages
       'org-babel-load-languages
