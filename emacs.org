@@ -756,28 +756,6 @@
    I want to file and refile notes to any header level 1 - 3 in any
    file in my =org-agenda-files= list.
 
-   Capturing urls from chrome etc is somewhat complicated.
-
-   I got my ideas from:
-   1. [[https://blog.aaronbieber.com/2016/11/24/org-capture-from-anywhere-on-your-mac.html][Org Capture From Anywhere on Your Mac]]
-   1. [[http://mediaonfire.com/blog/2017_07_21_org_protocol_firefox.html][Firefox and org-protocol URL Capture]]
-
-   In particular #2 above gave me a debug process:
-   #+BEGIN_SRC sh
-     emacsclient -n "org-protocol:///capture?url=http%3a%2f%2fduckduckgo%2ecom&title=DuckDuckGo"
-   #+END_SRC
-   The first one really gave me some help because it included python code
-   that parsed out the URL and then called the ~emacsclient~ process
-
-   The bookmarks I added to chrome were:
-   #+name: Org: Capture
-   #+BEGIN_SRC javascript
-     javascript:location.href='org-protocol://capture?template=l'+
-         '&url='+encodeURIComponent(location.href)+
-         '&title='+encodeURIComponent(document.title)+
-         '&body='+encodeURIComponent(window.getSelection());
-   #+END_SRC
-
    #+name: Org: store-link
    #+BEGIN_SRC javascript
    javascript:location.href='org-protocol://store-link'+
@@ -835,6 +813,46 @@
      (setq org-modules '(org-w3m org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe org-rmail org-habit))
    #+END_SRC
 
+*** Remote Capture
+   Capturing urls from chrome etc is called 'remote capture' and is somewhat complicated
+
+   I got my ideas from:
+   1. [[https://blog.aaronbieber.com/2016/11/24/org-capture-from-anywhere-on-your-mac.html][Org Capture From Anywhere on Your Mac]]
+   1. [[http://mediaonfire.com/blog/2017_07_21_org_protocol_firefox.html][Firefox and org-protocol URL Capture]]
+
+   In particular #2 above gave me a debug process:
+   #+BEGIN_SRC sh :session template :results silent
+     emacsclient -n "org-protocol:///capture?template=lurl=http%3a%2f%2fduckduckgo%2ecom&title=DuckDuckGo&body="
+   #+END_SRC
+
+   The first one really gave me some help because it included python code
+   that parsed out the URL and then called the ~emacsclient~ process
+
+   The bookmarks I added to chrome were:
+   - ~Org: capture~ :: which is used to capture a URL, title and anything I've highlighted. 
+   #+name: Org: capture
+   #+BEGIN_SRC javascript
+     javascript:location.href='org-protocol://capture?template=l'+
+         '&url='+encodeURIComponent(location.href)+
+         '&title='+encodeURIComponent(document.title)+
+         '&body='+encodeURIComponent(window.getSelection());
+   #+END_SRC
+   - ~Org: store-link~ :: which is used to capture an URL and its
+        title and to make it available for storage
+
+   #+NAME: Org: store-link
+   #+BEGIN_SRC javascript
+     javascript:location.href='org-protocol://store-link?'+
+         'url='+encodeURIComponent(location.href)+
+         '&title='+encodeURIComponent(document.title);
+   #+END_SRC
+     
+   Remote capture requires that the ~org-protocol~ package is loaded:
+   #+NAME: org-config
+   #+BEGIN_SRC emacs-lisp
+        ;;; org-protocol is required if we're to use an external drive
+     (require 'org-protocol)
+   #+END_SRC
 ** Org-Babel
 
 *** Fontifying source blocks
