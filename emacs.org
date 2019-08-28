@@ -40,7 +40,7 @@
          (when (not (equal 'default f))
            (set-face-attribute f nil :height 1.0))))
 
-     (load-theme 'tango-dark t)
+     (load-theme 'leuven t)
      (add-hook 'after-init-hook
                'single-font-size)
 
