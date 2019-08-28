@@ -814,45 +814,45 @@
    #+END_SRC
 
 *** Remote Capture
-   Capturing urls from chrome etc is called 'remote capture' and is somewhat complicated
+    Capturing urls from chrome etc is called 'remote capture' and is somewhat complicated
 
-   I got my ideas from:
-   1. [[https://blog.aaronbieber.com/2016/11/24/org-capture-from-anywhere-on-your-mac.html][Org Capture From Anywhere on Your Mac]]
-   1. [[http://mediaonfire.com/blog/2017_07_21_org_protocol_firefox.html][Firefox and org-protocol URL Capture]]
+    I got my ideas from:
+    1. [[https://blog.aaronbieber.com/2016/11/24/org-capture-from-anywhere-on-your-mac.html][Org Capture From Anywhere on Your Mac]]
+    1. [[http://mediaonfire.com/blog/2017_07_21_org_protocol_firefox.html][Firefox and org-protocol URL Capture]]
 
-   In particular #2 above gave me a debug process:
-   #+BEGIN_SRC sh :session template :results silent
+    In particular #2 above gave me a debug process:
+    #+BEGIN_SRC sh :session template :results silent
      emacsclient -n "org-protocol:///capture?template=lurl=http%3a%2f%2fduckduckgo%2ecom&title=DuckDuckGo&body="
-   #+END_SRC
+    #+END_SRC
 
-   The first one really gave me some help because it included python code
-   that parsed out the URL and then called the ~emacsclient~ process
+    The first one really gave me some help because it included python code
+    that parsed out the URL and then called the ~emacsclient~ process
 
-   The bookmarks I added to chrome were:
-   - ~Org: capture~ :: which is used to capture a URL, title and anything I've highlighted. 
-   #+name: Org: capture
-   #+BEGIN_SRC javascript
+    The bookmarks I added to chrome were:
+    - ~Org: capture~ :: which is used to capture a URL, title and anything I've highlighted.
+    #+name: Org: capture
+    #+BEGIN_SRC javascript
      javascript:location.href='org-protocol://capture?template=l'+
          '&url='+encodeURIComponent(location.href)+
          '&title='+encodeURIComponent(document.title)+
          '&body='+encodeURIComponent(window.getSelection());
-   #+END_SRC
-   - ~Org: store-link~ :: which is used to capture an URL and its
-        title and to make it available for storage
+    #+END_SRC
+    - ~Org: store-link~ :: which is used to capture an URL and its
+         title and to make it available for storage
 
-   #+NAME: Org: store-link
-   #+BEGIN_SRC javascript
+    #+NAME: Org: store-link
+    #+BEGIN_SRC javascript
      javascript:location.href='org-protocol://store-link?'+
          'url='+encodeURIComponent(location.href)+
          '&title='+encodeURIComponent(document.title);
-   #+END_SRC
-     
-   Remote capture requires that the ~org-protocol~ package is loaded:
-   #+NAME: org-config
-   #+BEGIN_SRC emacs-lisp
+    #+END_SRC
+
+    Remote capture requires that the ~org-protocol~ package is loaded:
+    #+NAME: org-config
+    #+BEGIN_SRC emacs-lisp
         ;;; org-protocol is required if we're to use an external drive
      (require 'org-protocol)
-   #+END_SRC
+    #+END_SRC
 ** Org-Babel
 
 *** Fontifying source blocks
@@ -921,57 +921,58 @@
 
     #+END_SRC
 
-** Language evaluation support
+*** Language evaluation support
 
-   Org-Babel needs to be told that evaluation of certain languages is
-   allowed. I collect all languages here, then enable all of them at
-   the end of the section.
+    Org-Babel needs to be told that evaluation of certain languages is
+    allowed. I collect all languages here, then enable all of them at
+    the end of the section.
 
-   + Install plantuml from http://plantuml.com
-   + Install graphviz using ~brew install graphviz~ and then restart emacs
+    + Install plantuml from http://plantuml.com
+    + Install graphviz using ~brew install graphviz~ and then restart emacs
 
-   #+name: org-config
-   #+BEGIN_SRC emacs-lisp
-     ;; List of languages that may be evaluated in Org documents
-     (setq org-babel-load-languages
-           '((emacs-lisp . t)
-             (shell . t)
-             (clojure .t)
-             (ledger . t)
-             (plantuml . t)
-             (dot . t)
-             (ditaa . t)
-             ))
+    #+name: org-config
+    #+BEGIN_SRC emacs-lisp
+      ;; List of languages that may be evaluated in Org documents
+      (setq org-babel-load-languages
+            '((emacs-lisp . t)
+              (shell . t)
+              (clojure .t)
+              (ledger . t)
+              (plantuml . t)
+              (dot . t)
+              (ditaa . t)
+              ))
 
-     (org-babel-do-load-languages
-      'org-babel-load-languages
-      org-babel-load-languages)
+      (org-babel-do-load-languages
+       'org-babel-load-languages
+       org-babel-load-languages)
 
-     ;; use CIDER repl to evaluate clojure snippets
-     (setq org-babel-clojure-backend 'cider)
-   #+END_SRC
+      ;; use CIDER repl to evaluate clojure snippets
+      (setq org-babel-clojure-backend 'cider)
+    #+END_SRC
 
-** Diagramming
+**** TODO Configure language eval no questions
+*** Diagramming
 
-   I like [[http://www.graphviz.org/][Graphviz]] for generating graphs. It takes a few lines of code
-   to link graphviz's =dot= mode to =org-babel= so I can include dot
-   source in org mode and export with nice looking diagrams.
+    I like [[http://www.graphviz.org/][Graphviz]] for generating graphs. It takes a few lines of code
+    to link graphviz's =dot= mode to =org-babel= so I can include dot
+    source in org mode and export with nice looking diagrams.
 
-   #+BEGIN_SRC emacs-lisp
-     (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
+    #+END_SRC
 
-** Exporting to slides
-   #+name: org-config-languages
-   #+BEGIN_SRC emacs-lisp
-     (require 'ox-latex)
-     (require 'ox-beamer)
-   #+END_SRC
-** Exporting to LibreOffice / ODT
-   #+name: org-config-languages
-   #+BEGIN_SRC emacs-lisp
-     (require 'ox-odt)
-   #+END_SRC
+*** Exporting to slides
+    #+name: org-config-languages
+    #+BEGIN_SRC emacs-lisp
+      (require 'ox-latex)
+      (require 'ox-beamer)
+    #+END_SRC
+*** Exporting to LibreOffice / ODT
+    #+name: org-config-languages
+    #+BEGIN_SRC emacs-lisp
+      (require 'ox-odt)
+    #+END_SRC
 * Bookkeeping
   I'm trying out ~ledger-cli~ and ~ledger-mode~ for personal
   bookkeeping.
