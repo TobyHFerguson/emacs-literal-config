@@ -953,6 +953,9 @@
     allowed. I collect all languages here, then enable all of them at
     the end of the section.
 
+    I want to evaluate all code blocks without being prompted, as per
+    [[info:org#Structure%20editing][info:org#Structure editing]]
+
     + Install plantuml from http://plantuml.com
     + Install graphviz using ~brew install graphviz~ and then restart emacs
 
@@ -975,6 +978,9 @@
 
       ;; use CIDER repl to evaluate clojure snippets
       (setq org-babel-clojure-backend 'cider)
+
+      ;;; Don't prompt for evaluation
+      (setq org-confirm-babel-evaluate nil)
     #+END_SRC
 
 **** TODO Configure language eval no questions
