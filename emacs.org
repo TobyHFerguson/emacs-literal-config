@@ -869,6 +869,16 @@
         ;;; org-protocol is required if we're to use an external drive
      (require 'org-protocol)
     #+END_SRC
+*** Link Handling
+    I like images to be displayed when the document is opened. This is
+    described in the docs: [[info:org#Handling%20links][info:org#Handling links]]
+    
+    Reminder ~‘C-c C-x C-v     (org-toggle-inline-images)’~
+    #+NAME: org-config
+    #+BEGIN_SRC emacs-lisp
+    (setq org-startup-with-inline-images t)
+    #+END_SRC
+
 ** Org-Babel
 
 *** Fontifying source blocks
