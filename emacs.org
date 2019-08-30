@@ -680,6 +680,21 @@
           `((".*" . ,temporary-file-directory)))
   #+END_SRC
 * Org Mode
+** Tagging
+   Tags can be purely dynamic, based on the tags seen, hard coded, or
+   a mixture. See [[info:org#Setting%20tags][info:org#Setting tags]] for details.
+
+   I like a preferred set of tags, but adding if necessary. 
+
+   The tags I choose are for areas of concern, not specific projects.
+   #+NAme: org-config
+   #+BEGIN_SRC emacs-lisp
+     (setq org-tag-persistent-alist ' (("Money" .?m)
+                                       ("Emacs" . ?e)
+                                       ("@Work" . ?w)
+                                       ("Family" . ?f)))
+
+   #+END_SRC
 ** Global keys
 
    Short key bindings for capturing notes/links and switching to agenda.
