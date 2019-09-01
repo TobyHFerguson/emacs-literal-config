@@ -799,12 +799,12 @@
 
 
      (setq org-agenda-custom-commands
-           '(("w" "At work" tags-todo "@work"
-              ((org-agenda-overriding-header "Work")
-               (org-agenda-skip-function #'my-org-agenda-skip-all-siblings-but-first)))
-             ("g" "Plan today"
-              ((agenda "" ((org-agenda-span 14)))
-               ))))
+           '(
+             ("w" "At work"
+              ((agenda)
+               (tags-todo "@work" ((org-agenda-overriding-header "Work")))
+               (tags-todo "@Work" ((org-agenda-overriding-header "Work")))))
+             ("e" "Emacs" ((tags "Emacs")))))
 
      (defun my-org-agenda-skip-all-siblings-but-first ()
        "Skip all but the first non-done entry."
