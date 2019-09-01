@@ -681,7 +681,8 @@
      (setq org-tag-persistent-alist ' (("Money" .?m)
                                        ("Emacs" . ?e)
                                        ("@Work" . ?w)
-                                       ("Family" . ?f)))
+                                       ("Family" . ?f)
+                                       ("@Home" . ?h)))
 
    #+END_SRC
 ** Global keys
@@ -818,7 +819,7 @@
          (when should-skip-entry
            (or (outline-next-heading)
                (goto-char (point-max))))))
-		  
+
      (defun org-current-is-todo ()
        (string= "TODO" (org-get-todo-state)))
 
