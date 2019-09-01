@@ -48,25 +48,14 @@
 
 ** Font
 
-   # I like [[http://www.levien.com/type/myfonts/inconsolata.html][Inconsolata]], but it doesn't support a wide range of Unicode
-   # characters, so I fall back on [[http://dejavu-fonts.org/wiki/Main_Page][DejaVu Sans]] for those.
-
+   # I like Mono space,
    #+name: look-and-feel
    #+BEGIN_SRC emacs-lisp
      (set-face-attribute 'default nil
-                         :family "Inconsolata"
-                         :height 150
+                         :family "PT Mono"
+                         :height 130
                          :weight 'normal
                          :width 'normal)
-
-     (when (functionp 'set-fontset-font)
-       (set-fontset-font "fontset-default"
-                         'unicode
-                         (font-spec :family "DejaVu Sans Mono"
-                                    :width 'normal
-                                    :size 15.5
-                                    :weight 'normal)))
-
    #+END_SRC
 
 
