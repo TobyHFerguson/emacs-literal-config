@@ -774,11 +774,11 @@
                               "~/gtd/tickler.org"))
 
      (setq org-capture-templates
-           '(("t" "Todo" entry (file+headline "~/org/gtd.org" "Inbox")
+           '(("t" "Todo" entry (file+headline "~/gtd/gtd.org" "Inbox")
               "* NEXT %?\nEntered on %U\n  %i\n  %a")
              ("T" "Tickler" entry
-                                    (file+headline "~/gtd/tickler.org" "Tickler")
-                                    "* %i%? \n %U")
+              (file+headline "~/gtd/tickler.org" "Tickler")
+              "* %i%? \n %U")
              ("j" "Journal" entry (file+datetree "~/gtd/journal.org")
               "* %?\nEntered on %U\n  %i\n  %a")
              ("w" "org-protocol" entry (file "~/gtd/refile.org")
