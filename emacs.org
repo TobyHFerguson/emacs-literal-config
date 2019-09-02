@@ -687,7 +687,8 @@
    #+END_SRC
 ** Global keys
 
-   Short key bindings for capturing notes/links and switching to agenda.
+   Short key bindings for capturing notes/links, switching to
+   agenda and projects file
 
    #+name: org-config
    #+BEGIN_SRC emacs-lisp
@@ -695,6 +696,12 @@
      (global-set-key "\C-cc" 'org-capture)
      (global-set-key "\C-ca" 'org-agenda)
      (global-set-key "\C-cb" 'org-switchb)
+
+     (defun my/get-things-done ()
+       (interactive)
+       (find-file "~/gtd/projects.org"))
+
+     (global-set-key "\C-cd" 'my/get-things-done)
    #+END_SRC
 
    Org-Agenda needs to be loaded before calling =org-agenda= works.
@@ -790,11 +797,6 @@
 
      (setq org-protocol-default-template-key "w")
 
-     (defun my/get-things-done ()
-       (interactive)
-       (find-file "~/gtd/projects.org"))
-
-     (global-set-key "\C-cd" 'my/get-things-done)
 
 
 
