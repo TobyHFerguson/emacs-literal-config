@@ -678,11 +678,12 @@
    The tags I choose are for areas of concern, not specific projects.
    #+NAme: org-config
    #+BEGIN_SRC emacs-lisp
-     (setq org-tag-persistent-alist ' (("Money" .?m)
+     (setq org-tag-persistent-alist ' (("inbox" . ?i)
                                        ("Emacs" . ?e)
                                        ("@Work" . ?w)
                                        ("Family" . ?f)
-                                       ("@Home" . ?h)))
+                                       ("@Home" . ?h)
+                                       ("Money" .?m)))
 
    #+END_SRC
 ** Global keys
@@ -796,7 +797,7 @@
     #+BEGIN_SRC emacs-lisp
            (setq org-capture-templates
                  '(("t" "Todo" entry (file+headline "~/gtd/inbox.org" "Inbox")
-                    "* NEXT %?\nEntered on %U\n  %i\n  %a")
+                    "* NEXT %?:inbox:\nEntered on %U\n  %i\n  %a")
                    ("T" "Tickler" entry
                     (file+headline "~/gtd/tickler.org" "Tickler")
                     "* %i%? \n %U")
@@ -815,25 +816,32 @@
    I am going to base my GTD stuff on [[https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html][Orgmode for GTD]] - it looks
    simple, and I can try it for now. 
 
+*** Agenda
+    I want my agenda to only be built from my inbox, my projects and
+    my tickler.
+    #+name: org-config
+    #+BEGIN_SRC emacs-lisp
+      (setq org-agenda-files '("~/gtd/inbox.org"
+                               "~/gtd/projects.org"
+                               "~/gtd/tickler.org"))
+    #+END_SRC
+
+    I want custom commands so I can rapidly process my agenda
+
+    - Inbox :: "i" - Focus on processing my inbox
+    - Work :: "w" - the agenda with a focus on work topics
+    - Emacs :: "e" - Focus on emacs
+
    #+name: org-config
    #+BEGIN_SRC emacs-lisp
-
-
-     (setq org-agenda-files '("~/gtd/inbox.org"
-                              "~/gtd/projects.org"
-                              "~/gtd/tickler.org"))
-
-
-
-
-
      (setq org-agenda-custom-commands
            '(
+             ("i" "inbox" ((tags "inbox")))
              ("w" "At work"
               ((agenda)
-               (tags-todo "@work" ((org-agenda-overriding-header "Work")))
                (tags-todo "@Work" ((org-agenda-overriding-header "Work")))))
-             ("e" "Emacs" ((tags "Emacs")))))
+             ("e" "Emacs" ((tags "Emacs")))
+             ))
 
      (defun my-org-agenda-skip-all-siblings-but-first ()
        "Skip all but the first non-done entry."
