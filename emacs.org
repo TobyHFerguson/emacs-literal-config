@@ -714,8 +714,7 @@
    Store new notes in ~/org/notes.org
    #+name: org-config
    #+BEGIN_SRC emacs-lisp
-     (setq org-default-notes-file (concat org-directory "/gtd.org"))
-
+     (setq org-default-notes-file "~/gtd/notes.org")
    #+END_SRC
 
 ** Getting things done
@@ -765,17 +764,17 @@
    simple, and I can try it for now. 
    #+name: org-config
    #+BEGIN_SRC emacs-lisp
-     (setq org-refile-targets '(("~/gtd/gtd.org" :maxlevel . 3)
+     (setq org-refile-targets '(("~/gtd/projects.org" :maxlevel . 3)
                                 ("~/gtd/someday.org" :maxlevel . 3)
                                 ("~/gtd/tickler.org" :maxlevel . 2)))
 
 
      (setq org-agenda-files '("~/gtd/inbox.org"
-                              "~/gtd/gtd.org"
+                              "~/gtd/projects.org"
                               "~/gtd/tickler.org"))
 
      (setq org-capture-templates
-           '(("t" "Todo" entry (file+headline "~/gtd/gtd.org" "Inbox")
+           '(("t" "Todo" entry (file+headline "~/gtd/projects.org" "Projects")
               "* NEXT %?\nEntered on %U\n  %i\n  %a")
              ("T" "Tickler" entry
               (file+headline "~/gtd/tickler.org" "Tickler")
@@ -793,7 +792,7 @@
 
      (defun my/get-things-done ()
        (interactive)
-       (find-file "~/gtd/gtd.org"))
+       (find-file "~/gtd/projects.org"))
 
      (global-set-key "\C-cd" 'my/get-things-done)
 
