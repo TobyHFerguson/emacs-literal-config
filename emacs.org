@@ -622,7 +622,6 @@
   I like ~ido~ and ~smex~ for narrowing down files, commands, buffers
   etc.
 
-  I want to quickly get to my gtd file
   #+name: global-navigation
   #+BEGIN_SRC emacs-lisp
     (defun my/edit-emacs-configuration ()
@@ -643,11 +642,6 @@
 
     (global-set-key "\C-cw" 'pass)
 
-     (defun my/get-things-done ()
-       (interactive)
-       (find-file "~/gtd/gtd.org"))
-
-     (global-set-key "\C-cd" 'my/get-things-done)
   #+END_SRC
 
 ** Projects
@@ -725,10 +719,7 @@
    #+END_SRC
 
 ** Getting things done
-   I am going to base my GTD stuff on [[https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html][Orgmode for GTD]] - it looks
-   simple, and I can try it for now. 
 
-*** TODO items
    Actionable item keywords
 
    - NEXT :: something that can be done at any moment if I'm in the
@@ -761,61 +752,28 @@
      (setq org-todo-keywords
            '((sequence "NEXT(n)" "WAITING(w@)" "SOMEDAY(s)" "APPT(a)"  "DEFERRED(e)" "|" "CANCELLED(c@)" "DONE(d!)")))
 
-   #+END_SRC
-
-*** Agenda
-    I want to keep the number of files to the three critical
-    ones. Note that ~someday.org~ is omitted - I never want those
-    items on the agenda.
-    #+BEGIN_SRC emacs-lisp
-      (setq org-agenda-files '("~/gtd/inbox.org"
-                           "~/gtd/gtd.org"
-                           "~/gtd/tickler.org"))
-    #+END_SRC
-    I don't want to see scheduled items until the date they're needed.
-
-    I also don't want to see scheduled items which are DONE in the
-    agenda either. 
-    #+name: org-config
-    #+BEGIN_SRC emacs-lisp
-         ;; These settings ensure that items SCHEDULED in the future are not shown
+     ;; These settings ensure that items SCHEDULED in the future are not shown
      ;; until that date
      (setq org-agenda-todo-ignore-scheduled 'future)
-     (setq org-agenda-skip-scheduled-if-done t)
      (setq org-agenda-tags-todo-honor-ignore-options t)
-    #+END_SRC
+   #+END_SRC
 
-    I want to quickly jump to work and emacs tasks
-    #+NAME: org-config
-    #+BEGIN_SRC emacs-lisp
-      (setq org-agenda-custom-commands
-            '(
-              ("w" "At work"
-               ((agenda)
-                (tags-todo "@work" ((org-agenda-overriding-header "Work")))
-                (tags-todo "@Work" ((org-agenda-overriding-header "Work")))))
-              ("e" "Emacs" ((tags "Emacs")))))
+   I want to file and refile notes to any header level 1 - 3 in any
+   file in my =org-agenda-files= list.
 
-      (defun my-org-agenda-skip-all-siblings-but-first ()
-        "Skip all but the first non-done entry."
-        (let (should-skip-entry)
-          (unless (org-current-is-todo)
-            (setq should-skip-entry t))
-          (save-excursion
-            (while (and (not should-skip-entry) (org-goto-sibling t))
-              (when (org-current-is-todo)
-                (setq should-skip-entry t))))
-          (when should-skip-entry
-            (or (outline-next-heading)
-                (goto-char (point-max))))))
+   I am going to base my GTD stuff on [[https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html][Orgmode for GTD]] - it looks
+   simple, and I can try it for now. 
+   #+name: org-config
+   #+BEGIN_SRC emacs-lisp
+     (setq org-refile-targets '(("~/gtd/gtd.org" :maxlevel . 3)
+                                ("~/gtd/someday.org" :maxlevel . 3)
+                                ("~/gtd/tickler.org" :maxlevel . 2)))
 
-      (defun org-current-is-todo ()
-        (string= "TODO" (org-get-todo-state)))
-    #+END_SRC
-*** Capture
-    I want to capture todo items, tickler items, journal entries etc. 
-    #+NAME: org-config
-    #+BEGIN_SRC emacs-lisp
+
+     (setq org-agenda-files '("~/gtd/inbox.org"
+                              "~/gtd/gtd.org"
+                              "~/gtd/tickler.org"))
+
      (setq org-capture-templates
            '(("t" "Todo" entry (file+headline "~/gtd/gtd.org" "Inbox")
               "* NEXT %?\nEntered on %U\n  %i\n  %a")
@@ -832,20 +790,38 @@
               :empty-lines 1)))
 
      (setq org-protocol-default-template-key "w")
-    #+END_SRC
-*** Refile
-   I want to file and refile notes to any header level 1 - 3 in any
-   file in my =org-agenda-files= list.
 
-   #+name: org-config
-   #+BEGIN_SRC emacs-lisp
-     (setq org-refile-targets '(("~/gtd/gtd.org" :maxlevel . 3)
-                                ("~/gtd/someday.org" :maxlevel . 3)
-                                ("~/gtd/tickler.org" :maxlevel . 2)))
+     (defun my/get-things-done ()
+       (interactive)
+       (find-file "~/gtd/gtd.org"))
+
+     (global-set-key "\C-cd" 'my/get-things-done)
 
 
 
+     (setq org-agenda-custom-commands
+           '(
+             ("w" "At work"
+              ((agenda)
+               (tags-todo "@work" ((org-agenda-overriding-header "Work")))
+               (tags-todo "@Work" ((org-agenda-overriding-header "Work")))))
+             ("e" "Emacs" ((tags "Emacs")))))
 
+     (defun my-org-agenda-skip-all-siblings-but-first ()
+       "Skip all but the first non-done entry."
+       (let (should-skip-entry)
+         (unless (org-current-is-todo)
+           (setq should-skip-entry t))
+         (save-excursion
+           (while (and (not should-skip-entry) (org-goto-sibling t))
+             (when (org-current-is-todo)
+               (setq should-skip-entry t))))
+         (when should-skip-entry
+           (or (outline-next-heading)
+               (goto-char (point-max))))))
+
+     (defun org-current-is-todo ()
+       (string= "TODO" (org-get-todo-state)))
 
      (setq org-modules '(org-w3m org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe org-rmail org-habit))
    #+END_SRC
