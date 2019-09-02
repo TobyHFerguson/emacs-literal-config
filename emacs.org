@@ -775,6 +775,15 @@
                              ("~/gtd/tickler.org" :maxlevel . 2)))
    #+END_SRC
 
+   I also want to allow refiling to allow me to create top level
+   targets. I saw this article: [[https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html][Organizing Notes With Refile]] which
+   explained how:
+
+   #NAME: org-config
+   #+BEGIN_SRC emacs-lisp
+     (setq org-refile-allow-creating-parent-nodes 'confirm)
+   #+END_SRC
+
 *** Capture
     I want to capture the following items:
     - TODO :: Filed in ~inbox.org~ under a single top heading "Inbox"
@@ -843,15 +852,6 @@
        (string= "TODO" (org-get-todo-state)))
 
      (setq org-modules '(org-w3m org-bbdb org-bibtex org-docview org-gnus org-info org-irc org-mhe org-rmail org-habit))
-   #+END_SRC
-
-   I also want to allow refiling to allow me to create top level
-   targets. I saw this article: [[https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html][Organizing Notes With Refile]] which
-   explained how:
-
-   #NAME: org-config
-   #+BEGIN_SRC emacs-lisp
-     (setq org-refile-allow-creating-parent-nodes 'confirm)
    #+END_SRC
 **** Remote Capture
      Capturing urls from chrome etc is called 'remote capture' and is somewhat complicated
