@@ -677,10 +677,10 @@
   Store backup files in the system temp directory so I don't leave *~
   files everywhere.
 
-  #+NAME backup-config
+  #+NAME: backup-config
   #+BEGIN_SRC emacs-lisp
     (setq backup-directory-alist
-          `((".*" . ,temporary-file-directory)))
+          '((".*" . "~/.backups")))
   #+END_SRC
 * Org Mode
 ** BEORG integration
@@ -843,9 +843,11 @@
     my tickler.
     #+name: org-config
     #+BEGIN_SRC emacs-lisp
-      (setq org-agenda-files '("inbox.org"
-                               "projects.org"
-                               "tickler.org"))
+      (setq org-agenda-files (mapcar (lambda (file)
+                                      (concat org-directory "/" file) )
+                                     '("inbox.org"
+                                      "projects.org"
+                                      "tickler.org")))
     #+END_SRC
 
     I want custom commands so I can rapidly process my agenda
