@@ -103,6 +103,3 @@
   (warn "Org-Mode is out of date. We expect org 8 or higher, but instead we have %s" (org-version)))
 
 (org-babel-load-file "~/.emacs.d/emacs.org")
-
-(put 'narrow-to-region 'disabled nil)
-(put 'downcase-region 'disabled nil)

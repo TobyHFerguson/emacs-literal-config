@@ -188,18 +188,20 @@
   - No startup screen
   - an empty scratch buffer in org mode;
   - Frame maximized
+  - Narrow to region enabled
+  - downcase region enabled
+  - set goal column enabled
+  - Frame maximized
 
   #+NAME: startup
   #+BEGIN_SRC emacs-lisp
     (setq inhibit-startup-screen +1)
     (setq initial-major-mode 'org-mode)
     (setq initial-scratch-message nil)
-  #+END_SRC
-
-  #+NAME: startup
-  #+BEGIN_SRC emacs-lisp
+    (put 'narrow-to-region 'disabled nil)
+    (put 'downcase-region 'disabled nil)
+    (put 'set-goal-column 'disabled nil)
     (toggle-frame-maximized)
-
   #+END_SRC
 
 * Formatting and white-space
