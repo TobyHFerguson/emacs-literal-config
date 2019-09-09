@@ -681,6 +681,13 @@
           `((".*" . ,temporary-file-directory)))
   #+END_SRC
 * Org Mode
+** BEORG integration
+*** Location of org files
+   BEORG requires that the org directory be in a fixed location
+   #+name: org-config
+   #+BEGIN_SRC emacs-lisp
+   (setq org-directory "/Users/toby/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org")
+   #+END_SRC
 ** Tagging
    Tags can be purely dynamic, based on the tags seen, hard coded, or
    a mixture. See [[info:org#Setting%20tags][info:org#Setting tags]] for details.
@@ -712,7 +719,7 @@
 
      (defun my/get-things-done ()
        (interactive)
-       (find-file "~/gtd/projects.org"))
+       (find-file (concat org-directory "/projects.org")))
 
      (global-set-key "\C-cd" 'my/get-things-done)
    #+END_SRC
@@ -731,17 +738,17 @@
         (setq org-agenda-span 14)
    #+END_SRC
 
-   Store new notes in ~/org/notes.org
+   Store new notes in =notes.org=
    #+name: org-config
    #+BEGIN_SRC emacs-lisp
-     (setq org-default-notes-file "~/gtd/notes.org")
+     (setq org-default-notes-file "notes.org")
    #+END_SRC
 
 ** Getting things done
 
    Actionable item keywords
 
-   - NEXT :: something that can be done at any moment if I'm in the
+   - TODO :: something that can be done at any moment if I'm in the
              right context. If it has a SCHEDULED date, it probably should
              not be done before that date and the configuration will make
              it invisible in the calender views if the date is in the
@@ -769,7 +776,7 @@
    #+name: org-config
    #+BEGIN_SRC emacs-lisp
      (setq org-todo-keywords
-           '((sequence "NEXT(n)" "WAITING(w@)" "SOMEDAY(s)" "APPT(a)"  "DEFERRED(e)" "|" "CANCELLED(c@)" "DONE(d!)")))
+           '((sequence "TODO(t)" "WAITING(w@)" "SOMEDAY(s)" "APPT(a)"  "DEFERRED(e)" "|" "CANCELLED(c@)" "DONE(d!)")))
 
      ;; These settings ensure that items SCHEDULED in the future are not shown
      ;; until that date
@@ -783,9 +790,10 @@
 
    #+name: org-config
    #+BEGIN_SRC emacs-lisp
-     (setq org-refile-targets '(("~/gtd/projects.org" :maxlevel . 3)
-                             ("~/gtd/someday.org" :maxlevel . 3)
-                             ("~/gtd/tickler.org" :maxlevel . 2)))
+     (setq org-refile-targets '(("projects.org"    :maxlevel . 3)
+                                ("someday.org" :maxlevel . 3)
+                                ("tickler.org" :maxlevel . 3)
+                                ))
    #+END_SRC
 
    I also want to allow refiling to allow me to create top level
@@ -808,17 +816,17 @@
     #+name: org-config
     #+BEGIN_SRC emacs-lisp
            (setq org-capture-templates
-                 '(("t" "Todo" entry (file+headline "~/gtd/inbox.org" "Inbox")
-                    "* NEXT %?:inbox:\nEntered on %U\n  %i\n  %a")
+                 '(("t" "Todo" entry (file+headline "inbox.org" "Inbox")
+                    "* TODO %?:inbox:\nEntered on %U\n  %i\n  %a")
                    ("T" "Tickler" entry
-                    (file+headline "~/gtd/tickler.org" "Tickler")
+                    (file+headline "tickler.org" "Tickler")
                     "* %i%? \n %U")
-                   ("j" "Journal" entry (file+datetree "~/gtd/journal.org")
+                   ("j" "Journal" entry (file+datetree "journal.org")
                     "* [%<%R>] %?\nEntered on %U\n  %i\n  %a")
-                   ("w" "org-protocol" entry (file "~/gtd/refile.org")
+                   ("w" "org-protocol" entry (file "refile.org")
                     "* TODO Review %a\n%U\n%:initial\n" :immediate-finish t)
                    ("l" "A link, for reading later." entry
-                    (file+headline "~/gtd/notes.org" "Reading List")
+                    (file+headline "notes.org" "Reading List")
                     "* %:annotation\n%U\n\n%i"
                     :empty-lines 1)))
 
@@ -833,9 +841,9 @@
     my tickler.
     #+name: org-config
     #+BEGIN_SRC emacs-lisp
-      (setq org-agenda-files '("~/gtd/inbox.org"
-                               "~/gtd/projects.org"
-                               "~/gtd/tickler.org"))
+      (setq org-agenda-files '("inbox.org"
+                               "projects.org"
+                               "tickler.org"))
     #+END_SRC
 
     I want custom commands so I can rapidly process my agenda
