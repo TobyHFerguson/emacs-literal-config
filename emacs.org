@@ -1069,9 +1069,18 @@
    =Archive=
    #+NAME: org-config
    #+BEGIN_SRC emacs-lisp
-     (setq org-archive-location (concat (file-name-as-directory org-directory) "Archive"))
+     (setq org-archive-location (concat 
+                                 (file-name-as-directory 
+                                  (concat (file-name-as-directory org-directory) "Archive"))
+                                  "%s_archive::" ))
    #+END_SRC
-
+** Stuck Projects
+   A project that is in the tickler file isn't stuck. The tickler file
+   has an inherited =:tickler:= tag
+   #+NAME: org-config
+   #+BEGIN_SRC emacs-lisp
+   (setq org-stuck-projects '("-tickler+LEVEL=2/-DONE" ("TODO" "NEXT" "NEXTACTION") nil "") )
+   #+END_SRC
 * Bookkeeping
   I'm trying out ~ledger-cli~ and ~ledger-mode~ for personal
   bookkeeping.
