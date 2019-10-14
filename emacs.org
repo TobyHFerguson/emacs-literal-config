@@ -720,6 +720,7 @@
      (global-set-key "\C-cc" 'org-capture)
      (global-set-key "\C-ca" 'org-agenda)
      (global-set-key "\C-cb" 'org-switchb)
+     (global-set-key "\C-cs" 'org-save-all-org-buffers)
 
      (defun my/get-things-done ()
        (interactive)
