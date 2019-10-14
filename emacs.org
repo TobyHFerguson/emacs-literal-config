@@ -688,7 +688,9 @@
    BEORG requires that the org directory be in a fixed location
    #+name: org-config
    #+BEGIN_SRC emacs-lisp
-   (setq org-directory "/Users/toby/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org")
+     ;; temporarily moving back to ~/org
+     ;; (setq org-directory "/Users/toby/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org")
+     (setq org-directory (expand-file-name "~/org"))
    #+END_SRC
 ** Tagging
    Tags can be purely dynamic, based on the tags seen, hard coded, or
