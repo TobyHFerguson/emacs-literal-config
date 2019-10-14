@@ -862,7 +862,7 @@
    #+BEGIN_SRC emacs-lisp
      (setq org-agenda-custom-commands
            '(
-             ("i" "inbox" ((tags "inbox")))
+             ("i" "inbox" tags ".*" ((org-agenda-files '("inbox.org"))))
              ("w" "At work"
               ((agenda)
                (tags-todo "@Work" ((org-agenda-overriding-header "Work")))))
@@ -1063,6 +1063,14 @@
     #+BEGIN_SRC emacs-lisp
       (require 'ox-odt)
     #+END_SRC
+** Archiving
+   I want my archive files to be stored in a separate subdirectory,
+   =Archive=
+   #+NAME: org-config
+   #+BEGIN_SRC emacs-lisp
+     (setq org-archive-location (concat (file-name-as-directory org-directory) "Archive"))
+   #+END_SRC
+
 * Bookkeeping
   I'm trying out ~ledger-cli~ and ~ledger-mode~ for personal
   bookkeeping.
