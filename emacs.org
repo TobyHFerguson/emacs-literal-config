@@ -736,7 +736,7 @@
         (require 'org-agenda)
    #+END_SRC
 
-   I prefer a forthnight's overview on the agenda.
+   I prefer a fortnight's overview on the agenda.
 
    #+name: org-config
    #+BEGIN_SRC emacs-lisp
