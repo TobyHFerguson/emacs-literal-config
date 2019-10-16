@@ -753,6 +753,10 @@
 
    Actionable item keywords
 
+   - NEXT :: The next thing that I can do. If there're NEXT and TODO
+             items at the same level then NEXT must be done before the
+             following TODO items. 
+
    - TODO :: something that can be done at any moment if I'm in the
              right context. If it has a SCHEDULED date, it probably should
              not be done before that date and the configuration will make
@@ -776,17 +780,21 @@
    - CANCELLED :: decided not to do this. May include a note on why
                   it's been cancelled.
 
-   - DONE :: finished item.
+   - DONE :: finished item. 
+
+   I want to ensure that I take a log when I complete (either cancel
+   or finish) a task, using the standard log templates
 
    #+name: org-config
    #+BEGIN_SRC emacs-lisp
      (setq org-todo-keywords
-           '((sequence "TODO(t)" "WAITING(w@)" "SOMEDAY(s)" "APPT(a)"  "DEFERRED(e)" "|" "CANCELLED(c@)" "DONE(d!)")))
+           '((sequence "NEXT(n)"  "TODO(t)" "WAITING(w@)" "SOMEDAY(s)" "APPT(a)"  "DEFERRED(e)" "|" "CANCELLED(c@)" "DONE(d@)")))
 
      ;; These settings ensure that items SCHEDULED in the future are not shown
      ;; until that date
      (setq org-agenda-todo-ignore-scheduled 'future)
      (setq org-agenda-tags-todo-honor-ignore-options t)
+     (setq org-log-done 'note)
    #+END_SRC
 
 *** Refile
