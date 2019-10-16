@@ -1081,6 +1081,13 @@
    #+BEGIN_SRC emacs-lisp
    (setq org-stuck-projects '("-tickler+LEVEL=2/-DONE" ("TODO" "NEXT" "NEXTACTION") nil "") )
    #+END_SRC
+** Logging
+   I like to log into a drawer called LOGBOOK
+   #+NAME: org-config
+   #+BEGIN_SRC emacs-lisp
+   (setq org-log-into-drawer t)
+   #+END_SRC
+
 * Bookkeeping
   I'm trying out ~ledger-cli~ and ~ledger-mode~ for personal
   bookkeeping.
