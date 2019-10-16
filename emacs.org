@@ -824,8 +824,8 @@
     - Tickler :: File in ~tickler.org~ under a single top heading
                  "Tickler"
     - Journal :: File in ~journal.org~ under a date tree
-      - External Links :: File in ~inbox.org~ under a single top
-                          heading "Inbox"
+    - External Links :: File in ~inbox.org~ under a single top
+                        heading "Inbox"
     #+name: org-config
     #+BEGIN_SRC emacs-lisp
            (setq org-capture-templates
@@ -855,10 +855,10 @@
     #+name: org-config
     #+BEGIN_SRC emacs-lisp
       (setq org-agenda-files (mapcar (lambda (file)
-                                      (concat org-directory "/" file) )
+                                       (expand-file-name file org-directory))
                                      '("inbox.org"
-                                      "projects.org"
-                                      "tickler.org")))
+                                       "projects.org"
+                                       "tickler.org")))
     #+END_SRC
 
     I want custom commands so I can rapidly process my agenda
@@ -871,7 +871,8 @@
    #+BEGIN_SRC emacs-lisp
      (setq org-agenda-custom-commands
            '(
-             ("i" "inbox" tags ".*" ((org-agenda-files '("inbox.org"))))
+             ("i" "inbox" tags ".*"
+              ((org-agenda-files (list (expand-file-name "inbox.org" org-directory)))))
              ("w" "At work"
               ((agenda)
                (tags-todo "@Work" ((org-agenda-overriding-header "Work")))))
