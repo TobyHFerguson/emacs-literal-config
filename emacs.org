@@ -856,15 +856,16 @@
    simple, and I can try it for now. 
 
 *** Agenda
-    I want my agenda to only be built from my inbox, my projects and
-    my tickler.
+    I want my agenda to only be built from my inbox, my projects, my
+    tickler and my calendar files.
     #+name: org-config
     #+BEGIN_SRC emacs-lisp
       (setq org-agenda-files (mapcar (lambda (file)
                                        (expand-file-name file org-directory))
                                      '("inbox.org"
                                        "projects.org"
-                                       "tickler.org")))
+                                       "tickler.org"
+                                       "calendar.org")))
     #+END_SRC
 
     I want custom commands so I can rapidly process my agenda
@@ -1101,6 +1102,56 @@
    #+NAME: org-config
    #+BEGIN_SRC emacs-lisp
    (setq org-log-into-drawer t)
+   #+END_SRC
+** Integration with Gcal
+   I need to use the [[https://github.com/myuhe/org-gcal.el][org-gcal]] package, so that is added to file:init.el
+
+   I also needed to setup an OAuth consent screen. I added the
+   following scope: = ./auth/calendar.events= and ignored the need for
+   verification. Once I'd done this then that was sufficient to allow
+   me to create the actual credential. 
+
+   #+NAME: gcal-config
+   #+BEGIN_SRC emacs-lisp
+     (require 'org-gcal)
+     (setq org-gcal-client-id "871683950797-qnqit9lit9vtbb3inhrkutb0aattou87.apps.googleusercontent.com"
+           org-gcal-client-secret "6teMK3tyz8FUjXosB0o6LrIc"
+           org-gcal-file-alist '(("toby.h.ferguson@gmail.com" .  "~/org/calendar.org")))
+   #+END_SRC
+   
+   The following ideas came from the [[https://cestlaz.github.io/posts/using-emacs-26-gcal/][Using Emacs - 26 - Google
+   Calendar, Org Agenda]] article.
+
+   We need to synchronize the agenda and the google calendar at two
+   times:
+   1. When the agenda is constructed
+   2. When an appointment is added to =calendar.org=
+
+   In the above article this is done by setting hooks at appropriate
+   times. This might be a little overkill and slow, but we'll
+   implement this for now.
+
+   Firstly, the agenda hook is run whenever the agenda is prepared:
+   #+NAME: org-config
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
+   #+END_SRC
+   However I'm not convinced that works so well - I've seen an example
+   where I deleted something in google and refreshing the agenda made
+   no difference. Nor did rebuilding the agenda.
+
+   Secondly, we use a capture template for adding appointments and use
+   the finalize hook to perform the sync:
+
+   #+NAME: org-config
+   #+BEGIN_SRC emacs-lisp
+     (setq org-capture-templates
+           (cons '("a" "Appointment" entry
+                   (file  "~/org/calendar.org" )
+                   "* %?\n\n%^T\n\n:PROPERTIES:\n\n:END:\n\n")
+                 org-capture-templates))
+
+     (add-hook 'org-capture-after-finalize-hook (lambda () (org-gcal-sync)))
    #+END_SRC
 
 * Bookkeeping

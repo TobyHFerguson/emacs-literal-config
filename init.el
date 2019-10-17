@@ -55,6 +55,7 @@
 	multiple-cursors
 	names
 	neotree
+        org-gcal
 	paredit
         php-mode
 	pkg-info
