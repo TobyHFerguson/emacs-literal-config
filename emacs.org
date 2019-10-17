@@ -818,6 +818,12 @@
      (setq org-refile-allow-creating-parent-nodes 'confirm)
    #+END_SRC
 
+   I want to show an outline path, including the file, when I attempt
+   to refile:
+   #+NAME: org-config
+   #+BEGIN_SRC emacs-lisp
+   (setq org-refile-use-outline-path 'file)
+   #+END_SRC
 *** Capture
     I want to capture the following items:
     - TODO :: Filed in ~inbox.org~ under a single top heading "Inbox"
