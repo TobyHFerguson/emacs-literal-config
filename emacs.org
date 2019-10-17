@@ -1180,6 +1180,7 @@
 
     (defvar outline-minor-mode-prefix "\M-#")
     <<environment>>
+    <<overwrite>>
     <<tools>>
     <<databases>>
     <<customize-config>>
@@ -1191,8 +1192,10 @@
     <<auto-complete>>
     <<global-keys>>
     <<global-navigation>>
+    ;;; gcal must be setup before org
+    <<gcal-config>>
     <<org-config>>
-    <<libraries>>
+    <<org-config-languages>>
     <<backup-config>>
     <<startup>>
   #+END_SRC
