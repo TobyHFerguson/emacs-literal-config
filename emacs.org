@@ -813,7 +813,7 @@
    targets. I saw this article: [[https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html][Organizing Notes With Refile]] which
    explained how:
 
-   #NAME: org-config
+   #+NAME: org-config
    #+BEGIN_SRC emacs-lisp
      (setq org-refile-allow-creating-parent-nodes 'confirm)
    #+END_SRC
