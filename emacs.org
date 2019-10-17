@@ -690,7 +690,9 @@
    #+BEGIN_SRC emacs-lisp
      ;; temporarily moving back to ~/org
      ;; (setq org-directory "/Users/toby/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/org")
-     (setq org-directory (expand-file-name "~/org"))
+     (setq org-directory (file-name-as-directory (expand-file-name "~/org")))
+
+
    #+END_SRC
 ** Tagging
    Tags can be purely dynamic, based on the tags seen, hard coded, or
@@ -724,7 +726,7 @@
 
      (defun my/get-things-done ()
        (interactive)
-       (find-file (concat org-directory "/projects.org")))
+       (find-file (expand-file-name "projects.org" org-directory)))
 
      (global-set-key "\C-cd" 'my/get-things-done)
    #+END_SRC
@@ -1085,10 +1087,10 @@
    =Archive=
    #+NAME: org-config
    #+BEGIN_SRC emacs-lisp
-     (setq org-archive-location (concat 
-                                 (file-name-as-directory 
-                                  (concat (file-name-as-directory org-directory) "Archive"))
-                                  "%s_archive::" ))
+     (setq org-archive-location (expand-file-name
+                                 "%s_archive::"
+                                 (expand-file-name "Archive" org-directory)
+                                   ))
    #+END_SRC
 ** Stuck Projects
    A project that is in the tickler file isn't stuck. The tickler file
@@ -1116,7 +1118,7 @@
      (require 'org-gcal)
      (setq org-gcal-client-id "871683950797-qnqit9lit9vtbb3inhrkutb0aattou87.apps.googleusercontent.com"
            org-gcal-client-secret "6teMK3tyz8FUjXosB0o6LrIc"
-           org-gcal-file-alist '(("toby.h.ferguson@gmail.com" .  "~/org/calendar.org")))
+           org-gcal-file-alist (list (cons "toby.h.ferguson@gmail.com"   (expand-file-name "calendar.org" org-directory))))
    #+END_SRC
    
    The following ideas came from the [[https://cestlaz.github.io/posts/using-emacs-26-gcal/][Using Emacs - 26 - Google
@@ -1147,7 +1149,7 @@
    #+BEGIN_SRC emacs-lisp
      (setq org-capture-templates
            (cons '("a" "Appointment" entry
-                   (file  "~/org/calendar.org" )
+                   (file  "calendar.org")
                    "* %?\n\n%^T\n\n:PROPERTIES:\n\n:END:\n\n")
                  org-capture-templates))
 
