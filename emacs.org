@@ -799,6 +799,35 @@
      (setq org-log-done 'note)
    #+END_SRC
 
+*** DAYPLAN
+    I use Reinig Konig's method of a dayplan.
+
+    To make it easy to copy items from my agenda to the plan I use his
+    function:
+
+    #+NAME: org-config
+    #+BEGIN_SRC emacs-lisp
+      (defun my/copy-idlink-to-clipboard() "Copy an ID link with the
+      headline to killring, if no ID is there then create a new unique
+      ID.  This function works only in org-mode or org-agenda buffers. 
+ 
+      The purpose of this function is to easily construct id:-links to 
+      org-mode items. If its assigned to a key it saves you marking the
+      text and copying to the killring."
+             (interactive)
+             (when (eq major-mode 'org-agenda-mode) ;switch to orgmode
+           (org-agenda-show)
+           (org-agenda-goto))       
+             (when (eq major-mode 'org-mode) ; do this only in org-mode buffers
+           (setq mytmphead (nth 4 (org-heading-components)))
+               (setq mytmpid (funcall 'org-id-get-create))
+           (setq mytmplink (format "[[id:%s][%s]]" mytmpid mytmphead))
+           (kill-new mytmplink)
+           (message "Copied %s to killring (clipboard)" mytmplink)
+             ))
+ 
+      (global-set-key (kbd "<f5>") 'my/copy-idlink-to-clipboard)
+    #+END_SRC
 *** Refile
    I want to file and refile notes to any header level 1 - 3 in any
    file in my =org-agenda-files= list.
@@ -834,24 +863,29 @@
     - Journal :: File in ~journal.org~ under a date tree
     - External Links :: File in ~inbox.org~ under a single top
                         heading "Inbox"
+    - Dayplan :: a dayplan, in =dayplan.org=, in date tree mode, from
+                 the =dayplan.txt= template file
     #+name: org-config
     #+BEGIN_SRC emacs-lisp
-           (setq org-capture-templates
-                 '(("t" "Todo" entry (file+headline "inbox.org" "Inbox")
-                    "* TODO %?:inbox:\nEntered on %U\n  %i\n  %a")
-                   ("T" "Tickler" entry
-                    (file+headline "tickler.org" "Tickler")
-                    "* %i%? \n %U")
-                   ("j" "Journal" entry (file+datetree "journal.org")
-                    "* [%<%R>] %?\nEntered on %U\n  %i\n  %a")
-                   ("w" "org-protocol" entry (file "refile.org")
-                    "* TODO Review %a\n%U\n%:initial\n" :immediate-finish t)
-                   ("l" "A link, for reading later." entry
-                    (file+headline "notes.org" "Reading List")
-                    "* %:annotation\n%U\n\n%i"
-                    :empty-lines 1)))
+      (setq org-capture-templates
+            '(("t" "Todo" entry (file+headline "inbox.org" "Inbox")
+               "* TODO %?:inbox:\nEntered on %U\n  %i\n  %a")
+              ("T" "Tickler" entry
+               (file+headline "tickler.org" "Tickler")
+               "* %i%? \n %U")
+              ("j" "Journal" entry (file+datetree "journal.org")
+               "* [%<%R>] %?\nEntered on %U\n  %i\n  %a")
+              ("w" "org-protocol" entry (file "refile.org")
+               "* TODO Review %a\n%U\n%:initial\n" :immediate-finish t)
+              ("l" "A link, for reading later." entry
+               (file+headline "notes.org" "Reading List")
+               "* %:annotation\n%U\n\n%i"
+               :empty-lines 1)
+              ("D"  "My day plan" plain (file+datetree "dayplan.org")
+                   (file "dayplan.txt")
+                   :immediate-finish t)))
 
-           (setq org-protocol-default-template-key "w")
+      (setq org-protocol-default-template-key "w")
     #+END_SRC
 
    I am going to base my GTD stuff on [[https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html][Orgmode for GTD]] - it looks
